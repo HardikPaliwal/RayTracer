@@ -1,0 +1,30 @@
+Hardik Paliwal
+20725413
+
+commands to run:
+premake4 gmake
+make config=release
+cp A4 Assets/.
+./A4 sample.lua
+
+For this assignment I have attempted to complete everything. My extra feature is reflections. My sample scene is a reflective plane and reflective dodeca with 3 light sources. The scene was implemented in a hierarchal manner. 
+I also enabled reflectance for nonheir.lua scene in order to make it  a bit easier to mark. 
+
+ However some issues remain.
+
+ 1. Something is wrong with cubes. They appear heavily noised. Apart from that they work fine (all transformations work and everything)
+
+ 2. my hierarchal model  works more or less but it is a bit buggy. For example hier.lua comes out fine but simple-cow.lua has the first space faring cow and is beyond the reach of my ray tracer
+
+
+Per the objectives list I am not meeting 2 of them:
+
+2. ▢ Cubes and triangle meshes are properly rendered.
+
+5. Hierarchical transformations perform correctly. Spheres and cubes can be transformed via arbitrary Affine transformations.
+
+But both objectives are more than partially implemented- save for some stupid bug they are pretty much finished. Please take that into consideration when marking (and also the fact that I forgot to submit my README for A3 and thus lost 10% for no reason. I assure you that README was as awesome as this one is.)
+
+
+Lastly note that in order to make an item be considered reflective by my program, just set the m_shininess value to 6.666.  Yes this is a hardcoded, magic number. 
+In my defense I am writing this at 9am after an all nighter trying to fix the aforementioned bugs which did not work out well. 
