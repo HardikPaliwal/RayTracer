@@ -4,7 +4,6 @@
 #include "A4.hpp"
 #include <vector>
 #include <glm/gtx/io.hpp>
-
 using namespace std;
 
 
@@ -146,12 +145,15 @@ void A4_Render(
   	const double imageHeight = d/2* glm::tan(fovy);
   	const double imageWidth = (width / height) * imageHeight;
 
+	Image textureMapping= Image(1024,1024);
+	textureMapping.loadPng("wood_texture.png");
+
+	
 	for (uint y = 0; y < height; ++y) {
 		for (uint x = 0; x < width; ++x) {
 			glm::vec3 pixel = glm::vec3(imageWidth * ((float) ((x + 0.5)/width)  -0.5), imageHeight * ((float)((y + 0.5)/height)-0.5),d/2);
 			glm::vec3 pixelInWorld = pixel.x * u + pixel.y * v + pixel.z * w + eye;
 			glm::vec3 direction = glm::normalize(eye-pixelInWorld) ;
-
 			glm::vec3 colour = iterate(eye, direction, lights, ambient, 2);
 
 			image(width-x, y, 0) = (double)colour.x;

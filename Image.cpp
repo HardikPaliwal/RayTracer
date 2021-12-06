@@ -119,10 +119,35 @@ bool Image::savePng(const std::string & filename) const
 		std::cerr << "encoder error " << error << ": " << lodepng_error_text(error)
 				<< std::endl;
 	}
-
 	return true;
 }
 
+bool Image::loadPng(const std::string &filename){
+  	std::vector<unsigned char> image;
+
+    unsigned error = lodepng::decode(image,  m_width, m_height,filename, LCT_RGB);
+
+    if(error) {
+		  std::cerr << "decoder error " << error << ": " << lodepng_error_text(error)
+				<< std::endl;
+	  }
+
+    // std::cout << image.size() << " " <<m_width * m_height * m_colorComponents<<  std::endl;
+    // for (int i = 0; i < 300; i++){
+    //     std::cout << (double) image[i];
+    // }
+
+    double color;
+	  for (uint y(0); y < m_height; y++) {
+	  	for (uint x(0); x < m_width; x++) {
+	  		for (uint i(0); i < m_colorComponents; ++i) {
+          m_data[m_colorComponents * (m_width * y + x) + i] = (double) image[m_colorComponents * (m_width * y + x) + i] / (double) 255;
+	  		}
+	  	}
+	  }
+    return true;
+
+}
 //---------------------------------------------------------------------------------------
 const double * Image::data() const
 {
