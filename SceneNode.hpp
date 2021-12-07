@@ -56,6 +56,7 @@ public:
     glm::vec3 translationStored = glm::vec3(0.0);
     glm::vec3 rotationStored = glm::vec3(0.0);
 
+
 private:
 	// The number of SceneNode instances.
 	static unsigned int nodeInstanceCount;

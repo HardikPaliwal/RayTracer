@@ -1,11 +1,12 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <vector>
 
 class Primitive {
 public:
   virtual ~Primitive();
-  virtual double intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal) =0;
+  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal) =0;
   virtual glm::vec3 normal(glm::vec3 intersect)=0;
   virtual void setOrigin(glm::vec3 origin);
 
@@ -14,7 +15,7 @@ public:
 class Sphere : public Primitive {
 public:
   virtual ~Sphere();
-  virtual double intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
+  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
   virtual glm::vec3 normal(glm::vec3 intersect);
   virtual void setOrigin(glm::vec3 origin);
 
@@ -25,7 +26,7 @@ public:
 class Cube : public Primitive {
 public:
   virtual ~Cube();
-  virtual double intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
+  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
   virtual glm::vec3 normal(glm::vec3 intersect);
   virtual void setOrigin(glm::vec3 origin);
 
@@ -42,7 +43,7 @@ public:
   {
   }
   virtual ~NonhierSphere();
-  virtual double intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
+  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
   virtual glm::vec3 normal(glm::vec3 intersect);
 
 private:
@@ -58,7 +59,7 @@ public:
   }
   
   virtual ~NonhierBox();
-  virtual double intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
+  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
   virtual glm::vec3 normal(glm::vec3 intersect);
 
 private:
@@ -66,3 +67,19 @@ private:
   double m_size;
   glm::vec3 normalStored;
 };
+
+// class Plane : public Primitive {
+//   public:
+//     Plane(const glm::vec3& pos, double size): m_pos(pos), m_size(size)
+//   {
+//   }
+  
+//   virtual ~Plane();
+//   virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
+//   virtual glm::vec3 normal(glm::vec3 intersect);
+
+// private:
+//   glm::vec3 m_pos;
+//   double m_size;
+//   glm::vec3 normalStored;
+// };

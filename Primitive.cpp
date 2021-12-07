@@ -8,7 +8,7 @@
 using namespace std;
 
 
-double sphereIntersection(glm::vec3 o, glm::vec3 d, glm::vec3 sphereOrigin, double sphereRadius){
+std::vector<glm::vec3> sphereIntersection(glm::vec3 o, glm::vec3 d, glm::vec3 sphereOrigin, double sphereRadius){
   double squared = glm::dot(d, d);
   double single = 2*glm::dot(d,o - sphereOrigin );
   double constant = glm::dot(o - sphereOrigin, o-sphereOrigin) - sphereRadius*sphereRadius;
@@ -22,22 +22,25 @@ double sphereIntersection(glm::vec3 o, glm::vec3 d, glm::vec3 sphereOrigin, doub
   ) {
     throw "no match";
   }
-
+  double t = 0;
   if (numRoots == 1) {
-    return roots[0];
+    t = roots[0];
   }
-  if (roots[0] < 0) {
-    return roots[1];
+  else if (roots[0] < 0) {
+    t= roots[1];
   }
 
-  if (roots[1] < 0) {
-    return roots[0];
+  else if (roots[1] < 0) {
+    t= roots[0];
+  } else {
+    t = std::min(roots[0], roots[1]);
   }
-  return std::min(roots[0], roots[1]);
+  glm::vec3 intersect = t*d + o;
+  return std::vector<glm::vec3> {glm::vec3(t), intersect - sphereOrigin};
 }
 
 
-double squareIntersection(glm::vec3 o, glm::vec3 d, glm::vec3 so, double sl, glm::vec3 *intersectionNormal){
+std::vector<glm::vec3> squareIntersection(glm::vec3 o, glm::vec3 d, glm::vec3 so, double sl, glm::vec3 *intersectionNormal){
   //6 Faces of a plane
   //Point on each face and correspounding normal:
   float halfSl = (float) sl;
@@ -62,6 +65,8 @@ double squareIntersection(glm::vec3 o, glm::vec3 d, glm::vec3 so, double sl, glm
                                    };
 
   float closest = 100000000000;
+  glm::vec3 normalA;
+  glm::vec3 intersectionA;
   for (int i = 0; i < normal.size(); i++){
     float res = glm::dot(normal[i], d);
 
@@ -75,13 +80,14 @@ double squareIntersection(glm::vec3 o, glm::vec3 d, glm::vec3 so, double sl, glm
 
       if (isOnCube && t < closest && t > 0.1) {
         closest = t;
-        *intersectionNormal = normal[i];
+        intersectionA = intersection;
+        normalA = normal[i];
       }
     }
   }
 
   if (closest == 100000000000)  throw "no match";
-  return closest;
+  return std::vector<glm::vec3> {glm::vec3(closest), normalA};
 }
 Primitive::~Primitive()
 {
@@ -95,7 +101,7 @@ Sphere::~Sphere()
 
 }
 
-double Sphere::intersection(glm::vec3 o, glm::vec3 d, bool storeNormal){
+std::vector<glm::vec3> Sphere::intersection(glm::vec3 o, glm::vec3 d, bool storeNormal){
     return sphereIntersection(o, d, m_pos, 1.0);
 }
 
@@ -115,7 +121,7 @@ Cube::~Cube()
 {
 }
 
-double Cube::intersection(glm::vec3 o, glm::vec3 d, bool storeNormal){
+std::vector<glm::vec3> Cube::intersection(glm::vec3 o, glm::vec3 d, bool storeNormal){
     glm::vec3 tmp;
     if (storeNormal) return squareIntersection(o, d, m_pos, m_size, &normalStored);
     else return squareIntersection(o, d, m_pos, m_size, &tmp);
@@ -135,7 +141,7 @@ NonhierSphere::~NonhierSphere()
 
 }
 
-double NonhierSphere::intersection(glm::vec3 o, glm::vec3 d, bool storeNormal){
+std::vector<glm::vec3> NonhierSphere::intersection(glm::vec3 o, glm::vec3 d, bool storeNormal){
   return sphereIntersection(o, d, m_pos, m_radius);
 }
 
@@ -149,7 +155,7 @@ NonhierBox::~NonhierBox()
 {
 }
 
-double NonhierBox::intersection(glm::vec3 o, glm::vec3 d, bool storeNormal){
+std::vector<glm::vec3> NonhierBox::intersection(glm::vec3 o, glm::vec3 d, bool storeNormal){
     glm::vec3 tmp;
     if (storeNormal) return squareIntersection(o, d, m_pos, m_size, &normalStored);
     else return squareIntersection(o, d, m_pos, m_size, &tmp);
@@ -158,3 +164,24 @@ glm::vec3  NonhierBox::normal(glm::vec3 intersect){
   return normalStored;
 }
 
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Plane::~Plane()
+// {
+// }
+
+// double Plane::intersection(glm::vec3 o, glm::vec3 d, bool storeNormal){
+//     float t = glm::dot(m_pos - o, normal[i]) / glm::dot(d, normal[i]);
+
+//       glm::vec3 intersection =  t *d + o;
+
+//       bool isOnPlane = intersection.x <= xmax && intersection.x >=xmin && intersection.y <= ymax && intersection.y >=ymin &&intersection.z <= zmax && intersection.z >=zmin;
+
+//       if (isOnCube && t < closest && t > 0.1) {
+//         closest = t;
+//         *intersectionNormal = normal[i];
+//     }
+// }
+// glm::vec3  Plane::normal(glm::vec3 intersect){
+//   return normalStored;
+// }
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

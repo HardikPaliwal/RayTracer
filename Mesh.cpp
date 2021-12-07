@@ -14,8 +14,9 @@
 
 using namespace std;
  
-double Mesh::intersection(glm::vec3 o, glm::vec3 d, bool storeNormal){
+std::vector<glm::vec3> Mesh::intersection(glm::vec3 o, glm::vec3 d, bool storeNormal){
 	float closest = 1000000000;
+	int faceIndex = 0;
     for (int i = 0; i < m_faces.size(); i++){
 		glm::vec3 a =  m_vertices[m_faces[i].v1];
 		glm::vec3 b = m_vertices[m_faces[i].v2];
@@ -29,15 +30,21 @@ double Mesh::intersection(glm::vec3 o, glm::vec3 d, bool storeNormal){
 		if (answer.z < closest && answer.z > 0.1 && answer.x > 0 && answer.x < 1 && answer.y>0 && answer.y <1 && gamma > 0 && gamma < 1){
 			closest = answer.z;
 			if (storeNormal)  matchedFace = i;  	//Store variables that'll help us calculate the normal later on
+			faceIndex = i;
 		}
 	}
 
 	if (closest == 1000000000) throw "no match";
-	return closest;
+	
+
+	glm::vec3 intersect = o + d*closest;
+	glm::vec3 u = m_vertices[m_faces[faceIndex].v2] - intersect;
+	glm::vec3 v = m_vertices[m_faces[faceIndex].v3] - intersect;
+	return std::vector<glm::vec3> {glm::vec3(closest),glm::normalize(glm::cross(u,v))};
 }
 glm::vec3  Mesh::normal(glm::vec3 intersect){
-	glm::vec3 u = m_vertices[m_faces[matchedFace].v2] - m_vertices[m_faces[matchedFace].v1];
-	glm::vec3 v = m_vertices[m_faces[matchedFace].v3] - m_vertices[m_faces[matchedFace].v1];
+	glm::vec3 u = m_vertices[m_faces[matchedFace].v2] - intersect;
+	glm::vec3 v = m_vertices[m_faces[matchedFace].v3] - intersect;
 	return glm::normalize(glm::cross(u,v));
 }
 
