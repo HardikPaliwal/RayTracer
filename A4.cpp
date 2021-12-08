@@ -5,13 +5,17 @@
 #include <vector>
 #include <glm/gtx/io.hpp>
 #include <map>
+#include <thread>
 
 using namespace std;
 
 
 std::vector<GeometryNode *> objects;
-
 std::map<string, Image> mappings = {};
+Image resultImage;
+std::list<const Light *> globalLights;
+glm::vec3 globalAmbient;
+
 //Cause the glm version isn't working =(
 glm::vec3  xyz(glm::vec4 thing){
 	return glm::vec3(thing.x, thing.y, thing.z);
@@ -78,13 +82,14 @@ std::vector<glm::vec3> hit(glm::vec3 eye, glm::vec3 direction, GeometryNode *&cl
 	return interSectionInfo;
 }
 
-glm::vec3 iterate(glm::vec3 eye, glm::vec3 direction, const std::list<Light *> & lights, glm::vec3 ambient, int maxBounces);
+glm::vec3 iterate(glm::vec3 eye, glm::vec3 direction, int maxBounces);
 
-glm::vec3 shade(glm::vec3 intersection, glm::vec3 normal, PhongMaterial *pMaterial,const std::list<Light *> & lights, glm::vec3 ambient, int maxBounces){
+glm::vec3 shade(glm::vec3 intersection, glm::vec3 normal, PhongMaterial *pMaterial, 
+			int maxBounces, glm::vec3 &uvCoordinates, glm::vec3 &t1, glm::vec3 &t2){
 	float lightIntensity = 250.7;
 	glm::vec3 finalColour = glm::vec3(0.0);
 
-	for(const auto& light : lights){
+	for(const auto& light : globalLights){
 		GeometryNode * inBetween = NULL;
 		glm::vec3 betweenLightAndPoint = glm::normalize( light->position - intersection);
 		hit(intersection, betweenLightAndPoint, inBetween, false);
@@ -93,25 +98,32 @@ glm::vec3 shade(glm::vec3 intersection, glm::vec3 normal, PhongMaterial *pMateri
 		if (pMaterial->m_shininess == 6.666 && maxBounces!=0) { //special shiny value to make an object reflective
 			glm::vec3 reflectingRay = 2 * (glm::dot(betweenLightAndPoint, normal) * normal) + betweenLightAndPoint;
 			maxBounces--;
-			finalColour += 0.4 * iterate(intersection, reflectingRay, lights, ambient, maxBounces);
+			finalColour += 0.4 * iterate(intersection, reflectingRay,  maxBounces);
 		}
 		
 		if (pMaterial->textureMapping != ""){
+			int x = (int)(1024*uvCoordinates.x);
+			int y = (int)(1024*uvCoordinates.y);
+			finalColour += glm::vec3(mappings[pMaterial->textureMapping](x,y, 0), mappings[pMaterial->textureMapping](x,y, 1),
+									mappings[pMaterial->textureMapping](x,y, 2));
 
 		}
 		if (pMaterial->normalMapping != ""){
+			int x = ((int)(1024*uvCoordinates.x));
+			int y = ((int)(1024*uvCoordinates.y)) ;
+			glm::vec3 col = glm::vec3(mappings[pMaterial->textureMapping](x,y, 0), mappings[pMaterial->textureMapping](x,y, 1),
+									mappings[pMaterial->textureMapping](x,y, 2));
+			normal = glm::normalize(normal + col.y * t1 + col.z*t2);
 			
-		}
-
+		} 
 		float distance = glm::distance(intersection, light->position);
 		glm::vec3 tmp= (1/(distance*distance))*light->colour * lightIntensity*pMaterial->m_kd  * glm::max(0.0f,glm::abs(glm::dot(normal,  betweenLightAndPoint)));
-
 		finalColour += tmp;
 	}
 	return finalColour;
 }
 
-glm::vec3 iterate(glm::vec3 eye, glm::vec3 direction, const std::list<Light *> & lights, glm::vec3 ambient, int maxBounces){
+glm::vec3 iterate(glm::vec3 eye, glm::vec3 direction,  int maxBounces){
 	GeometryNode * closestObject =NULL;
 	std::vector<glm::vec3> stuff = hit(eye, direction, closestObject, false);
 
@@ -123,7 +135,15 @@ glm::vec3 iterate(glm::vec3 eye, glm::vec3 direction, const std::list<Light *> &
 		glm::vec3 normal = glm::normalize(glm::transpose(glm::mat3(closestObject->invtrans))* objNormal);
 		PhongMaterial* pMaterial = static_cast<PhongMaterial*>(closestObject->m_material);
 
-		colour+= ambient + shade(intersection, normal, pMaterial, lights, ambient, maxBounces);
+		glm::vec3 uvCoordinates = glm::vec3(0);
+		glm::vec3 t1 = glm::vec3(0);
+		glm::vec3 t2 = glm::vec3(0);
+		if (stuff.size() >= 3) {
+			uvCoordinates = stuff[2];
+			t1 = glm::normalize(glm::transpose(glm::mat3(closestObject->invtrans)) * stuff[3]);
+			t2 =glm::normalize( glm::transpose(glm::mat3(closestObject->invtrans)) *  stuff[4]);
+		}
+		colour+= globalAmbient + shade(intersection, normal, pMaterial, maxBounces, uvCoordinates, t1, t2);
 	}
 	return colour;
 }
@@ -159,12 +179,16 @@ void A4_Render(
 
 	for(const Light * light : lights) {
 		std::cout << "\t\t" <<  *light << std::endl;
+		globalLights.push_back(light);
 	}
 	std::cout << "\t}" << std::endl;
 	std:: cout <<")" << std::endl;
 
 	size_t height = image.height();
 	size_t width = image.width();
+
+	resultImage = Image(height, width);
+	globalAmbient = glm::vec3(ambient.x, ambient.y, ambient.z);
 	fovy = glm::radians(fovy);
 	float d = glm::distance(eye, view);
 	
@@ -178,13 +202,17 @@ void A4_Render(
 
 	bool antiAliasing = false;
 	float superSample = 2;
+	bool isMultiThreaded = false;
+	int numberOfThreads = 4;
 	std::vector<string> listOfImages = {"brick_texture.png", "brick_normal.png", "wood_texture.png", "wood_texture.png"};
 	for (int i = 0; i < listOfImages.size(); i++){
 		Image k = Image(1024,1024);
 		k.loadPng(listOfImages[i]);
 		mappings.insert ( std::pair<string, Image>(listOfImages[i],  k));
 	}
-
+	// #pragma omp parallel for schedule(dynamic, 1) private(r)       // OpenMP
+	std::vector<std::thread> threads;
+ 
 	for (uint y = 0; y < height; ++y) {
 		for (uint x = 0; x < width; ++x) {
 			glm::vec3 colour;
@@ -197,7 +225,8 @@ void A4_Render(
 						glm::vec3 pixel = glm::vec3(imageWidth * ((float) (xOffset/width)  -0.5), imageHeight * ((float)(yOffset /height)-0.5),d/2);
 						glm::vec3 pixelInWorld = pixel.x * u + pixel.y * v + pixel.z * w + eye;
 						glm::vec3 direction = glm::normalize(eye-pixelInWorld) ;
-						colour += iterate(eye, direction, lights, ambient, 2);
+
+						colour += iterate(eye, direction,2);
 					}
 				}
 				colour /= superSample*superSample;
@@ -207,7 +236,7 @@ void A4_Render(
 				glm::vec3 pixel = glm::vec3(imageWidth * ((float) (xOffset/width)  -0.5), imageHeight * ((float)(yOffset /height)-0.5),d/2);
 				glm::vec3 pixelInWorld = pixel.x * u + pixel.y * v + pixel.z * w + eye;
 				glm::vec3 direction = glm::normalize(eye-pixelInWorld) ;
-				colour = iterate(eye, direction, lights, ambient, 2);
+				colour = iterate(eye, direction,  2);
 			}
 
 			image(width-x, y, 0) = (double)colour.x;
@@ -217,4 +246,6 @@ void A4_Render(
 			image(width-x, y, 2) = (double)colour.z;
 		}
 	}
+	for (auto& th : threads)  th.join();
+	// image = resultImage;
 }

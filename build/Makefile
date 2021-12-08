@@ -26,7 +26,7 @@ ifeq ($(config),debug)
   DEFINES   += -DDEBUG
   INCLUDES  += -I../../shared -I../../shared/include -I../../shared/gl3w -I../../shared/imgui
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -std=c++14
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -std=c++14 
   CXXFLAGS  += $(CFLAGS) 
   LDFLAGS   += -L../../lib
   LIBS      += -lcs488-framework -llua -llodepng -lstdc++ -ldl -lpthread
@@ -76,6 +76,7 @@ OBJECTS := \
 	$(OBJDIR)/Main.o \
 	$(OBJDIR)/polyroots.o \
 	$(OBJDIR)/scene_lua.o \
+	$(OBJDIR)/Ray.o \
 	$(OBJDIR)/Mesh.o \
 
 RESOURCES := \
@@ -171,6 +172,9 @@ $(OBJDIR)/polyroots.o: ../polyroots.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/scene_lua.o: ../scene_lua.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/Ray.o: ../Ray.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/Mesh.o: ../Mesh.cpp

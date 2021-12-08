@@ -214,8 +214,9 @@ Release/Mesh.o: ../Mesh.cpp ../../shared/include/glm/ext.hpp \
  ../../shared/include/glm/./gtx/simd_mat4.hpp \
  ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.hpp \
  ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.inl \
- ../../shared/include/glm/./gtx/simd_mat4.inl ../Mesh.hpp \
- ../Primitive.hpp ../Ray.hpp ../polyroots.hpp
+ ../../shared/include/glm/./gtx/simd_mat4.inl \
+ ../../shared/include/glm/gtx/io.hpp ../../shared/include/glm/gtx/io.inl \
+ ../Mesh.hpp ../Primitive.hpp ../Ray.hpp ../polyroots.hpp
 
 ../../shared/include/glm/ext.hpp:
 
@@ -650,6 +651,10 @@ Release/Mesh.o: ../Mesh.cpp ../../shared/include/glm/ext.hpp \
 ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.inl:
 
 ../../shared/include/glm/./gtx/simd_mat4.inl:
+
+../../shared/include/glm/gtx/io.hpp:
+
+../../shared/include/glm/gtx/io.inl:
 
 ../Mesh.hpp:
 

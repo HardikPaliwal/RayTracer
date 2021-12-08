@@ -3,8 +3,12 @@
 
 red = gr.material({0.366046, 0.037182, 0.041638}, {0, 0, 0}, 0, "", "")
 green = gr.material({0.162928, 0.408903, 0.083375}, {0, 0, 0}, 0, "", "")
-white = gr.material({0.740063, 0.742313, 0.733934}, {0, 0, 0}, 0, "woodgrain.png", "")
+white = gr.material({0.740063, 0.742313, 0.733934}, {0, 0, 0}, 0, "", "")
 mat1 = gr.material({0.7, 1.0, 0.7}, {0.5, 0.7, 0.5}, 6.666, "", "")
+
+wood = gr.material({0.5, 0.5, 0.5}, {0, 0, 0}, 0, "wood_texture.png", "wood_normal.png")
+brick = gr.material({0.5, 0.5, 0.5}, {0, 0, 0}, 0, "brick_texture.png", "brick_normal.png")
+
 
 
 scene_root = gr.node('scene')
@@ -44,7 +48,7 @@ plane = gr.mesh( 'plane', 'plane.obj' )
 plane:rotate("y", 90)
 plane:translate(-1,-1,5)
 scene_root:add_child(plane)
-plane:set_material(green)
+plane:set_material(brick)
 plane:scale(20, 20, 20)
 
 
@@ -53,7 +57,7 @@ plane2:translate(-1,-1,20)
 plane2:rotate("z", 90)
 plane2:rotate("y", 90)
 scene_root:add_child(plane2)
-plane2:set_material(white)
+plane2:set_material(wood)
 plane2:scale(20, 20, 20)
 
 plane3 = gr.mesh( 'plane3', 'plane.obj' )
@@ -87,6 +91,6 @@ s:translate(0, 0, 8)
 white_light = gr.light({1, 8, 0}, {0.9, 0.9, 0.9}, {1, 0, 0})
 
 
-gr.render(scene_root, 'test.png', 200, 200,
+gr.render(scene_root, 'test.png', 300, 300,
 	  {0, 2, 0}, {0, 2, 5}, {0, 1, 0}, 50,
 	  {0.3, 0.3, 0.3}, {white_light})

@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include <glm/ext.hpp>
+#include <glm/gtx/io.hpp>
 
 // #include "cs488-framework/ObjFileDecoder.hpp"
 #include "Mesh.hpp"
@@ -40,7 +41,10 @@ std::vector<glm::vec3> Mesh::intersection(glm::vec3 o, glm::vec3 d, bool storeNo
 	glm::vec3 intersect = o + d*closest;
 	glm::vec3 u = m_vertices[m_faces[faceIndex].v2] - intersect;
 	glm::vec3 v = m_vertices[m_faces[faceIndex].v3] - intersect;
-	return std::vector<glm::vec3> {glm::vec3(closest),glm::normalize(glm::cross(u,v))};
+	intersect.x = intersect.x+1;
+	intersect.y = intersect.z +1;
+	intersect.z = 0;
+	return std::vector<glm::vec3> {glm::vec3(closest),glm::normalize(glm::cross(u,v)), intersect/2, u, v};
 }
 glm::vec3  Mesh::normal(glm::vec3 intersect){
 	glm::vec3 u = m_vertices[m_faces[matchedFace].v2] - intersect;

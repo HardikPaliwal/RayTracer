@@ -1,97 +1,85 @@
-Release/scene_lua.o: ../scene_lua.cpp ../scene_lua.hpp ../lua488.hpp \
- ../../shared/lua-5.3.1/src/lua.h ../../shared/lua-5.3.1/src/luaconf.h \
- ../../shared/lua-5.3.1/src/lualib.h ../../shared/lua-5.3.1/src/lua.h \
- ../../shared/lua-5.3.1/src/lauxlib.h ../Light.hpp \
- ../../shared/include/glm/glm.hpp \
- ../../shared/include/glm/detail/_fixes.hpp \
- ../../shared/include/glm/fwd.hpp \
- ../../shared/include/glm/detail/type_int.hpp \
- ../../shared/include/glm/detail/setup.hpp \
- ../../shared/include/glm/detail/type_float.hpp \
- ../../shared/include/glm/detail/type_vec.hpp \
- ../../shared/include/glm/detail/precision.hpp \
- ../../shared/include/glm/detail/type_mat.hpp \
- ../../shared/include/glm/vec2.hpp \
- ../../shared/include/glm/detail/type_vec2.hpp \
- ../../shared/include/glm/detail/type_vec2.inl \
- ../../shared/include/glm/vec3.hpp \
- ../../shared/include/glm/detail/type_vec3.hpp \
- ../../shared/include/glm/detail/type_vec3.inl \
- ../../shared/include/glm/vec4.hpp \
- ../../shared/include/glm/detail/type_vec4.hpp \
- ../../shared/include/glm/detail/type_vec4.inl \
- ../../shared/include/glm/mat2x2.hpp \
- ../../shared/include/glm/detail/type_mat2x2.hpp \
- ../../shared/include/glm/detail/type_mat2x2.inl \
- ../../shared/include/glm/mat2x3.hpp \
- ../../shared/include/glm/detail/type_mat2x3.hpp \
- ../../shared/include/glm/detail/type_mat2x3.inl \
- ../../shared/include/glm/mat2x4.hpp \
- ../../shared/include/glm/detail/type_mat2x4.hpp \
- ../../shared/include/glm/detail/type_mat2x4.inl \
- ../../shared/include/glm/mat3x2.hpp \
- ../../shared/include/glm/detail/type_mat3x2.hpp \
- ../../shared/include/glm/detail/type_mat3x2.inl \
- ../../shared/include/glm/mat3x3.hpp \
- ../../shared/include/glm/detail/type_mat3x3.hpp \
- ../../shared/include/glm/detail/type_mat3x3.inl \
- ../../shared/include/glm/mat3x4.hpp \
- ../../shared/include/glm/detail/type_mat3x4.hpp \
- ../../shared/include/glm/detail/type_mat3x4.inl \
- ../../shared/include/glm/mat4x2.hpp \
- ../../shared/include/glm/detail/type_mat4x2.hpp \
- ../../shared/include/glm/detail/type_mat4x2.inl \
- ../../shared/include/glm/mat4x3.hpp \
- ../../shared/include/glm/detail/type_mat4x3.hpp \
- ../../shared/include/glm/detail/type_mat4x3.inl \
- ../../shared/include/glm/mat4x4.hpp \
- ../../shared/include/glm/detail/type_mat4x4.hpp \
- ../../shared/include/glm/detail/type_mat4x4.inl \
- ../../shared/include/glm/trigonometric.hpp \
- ../../shared/include/glm/detail/func_trigonometric.hpp \
- ../../shared/include/glm/detail/func_trigonometric.inl \
- ../../shared/include/glm/detail/_vectorize.hpp \
- ../../shared/include/glm/detail/type_vec1.hpp \
- ../../shared/include/glm/detail/type_vec1.inl \
- ../../shared/include/glm/exponential.hpp \
- ../../shared/include/glm/detail/func_exponential.hpp \
- ../../shared/include/glm/detail/func_exponential.inl \
- ../../shared/include/glm/detail/func_vector_relational.hpp \
- ../../shared/include/glm/detail/func_vector_relational.inl \
- ../../shared/include/glm/common.hpp \
- ../../shared/include/glm/detail/func_common.hpp \
- ../../shared/include/glm/detail/_fixes.hpp \
- ../../shared/include/glm/detail/func_common.inl \
- ../../shared/include/glm/packing.hpp \
- ../../shared/include/glm/detail/func_packing.hpp \
- ../../shared/include/glm/detail/func_packing.inl \
- ../../shared/include/glm/detail/type_half.hpp \
- ../../shared/include/glm/detail/type_half.inl \
- ../../shared/include/glm/geometric.hpp \
- ../../shared/include/glm/detail/func_geometric.hpp \
- ../../shared/include/glm/detail/func_geometric.inl \
- ../../shared/include/glm/matrix.hpp \
- ../../shared/include/glm/detail/func_matrix.hpp \
- ../../shared/include/glm/detail/func_matrix.inl \
- ../../shared/include/glm/vector_relational.hpp \
- ../../shared/include/glm/integer.hpp \
- ../../shared/include/glm/detail/func_integer.hpp \
- ../../shared/include/glm/detail/func_integer.inl ../Mesh.hpp \
- ../Primitive.hpp ../Ray.hpp ../../shared/include/glm/ext.hpp \
+Release/Ray.o: ../Ray.cpp ../Ray.hpp ../../shared/include/glm/ext.hpp \
  ../../shared/include/glm/./gtc/bitfield.hpp \
+ ../../shared/include/glm/./gtc/../detail/setup.hpp \
+ ../../shared/include/glm/./gtc/../detail/precision.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_int.hpp \
+ ../../shared/include/glm/./gtc/../detail/_vectorize.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_vec1.hpp \
+ ../../shared/include/glm/./gtc/../detail/../fwd.hpp \
+ ../../shared/include/glm/./gtc/../detail/../detail/type_float.hpp \
+ ../../shared/include/glm/./gtc/../detail/../detail/type_vec.hpp \
+ ../../shared/include/glm/./gtc/../detail/../detail/type_mat.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_vec1.inl \
+ ../../shared/include/glm/./gtc/../detail/type_vec2.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_vec2.inl \
+ ../../shared/include/glm/./gtc/../detail/type_vec3.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_vec3.inl \
+ ../../shared/include/glm/./gtc/../detail/type_vec4.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_vec4.inl \
  ../../shared/include/glm/./gtc/bitfield.inl \
  ../../shared/include/glm/./gtc/constants.hpp \
  ../../shared/include/glm/./gtc/constants.inl \
  ../../shared/include/glm/./gtc/epsilon.hpp \
  ../../shared/include/glm/./gtc/epsilon.inl \
  ../../shared/include/glm/./gtc/quaternion.hpp \
+ ../../shared/include/glm/./gtc/../mat3x3.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat3x3.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat3x3.inl \
+ ../../shared/include/glm/./gtc/../mat4x4.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat4x4.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat4x4.inl \
+ ../../shared/include/glm/./gtc/../vec3.hpp \
+ ../../shared/include/glm/./gtc/../vec4.hpp \
  ../../shared/include/glm/./gtc/quaternion.inl \
+ ../../shared/include/glm/./gtc/../trigonometric.hpp \
+ ../../shared/include/glm/./gtc/../detail/func_trigonometric.hpp \
+ ../../shared/include/glm/./gtc/../detail/func_trigonometric.inl \
+ ../../shared/include/glm/./gtc/../geometric.hpp \
+ ../../shared/include/glm/./gtc/../detail/func_geometric.hpp \
+ ../../shared/include/glm/./gtc/../detail/func_geometric.inl \
+ ../../shared/include/glm/./gtc/../detail/func_exponential.hpp \
+ ../../shared/include/glm/./gtc/../detail/func_exponential.inl \
+ ../../shared/include/glm/./gtc/../detail/func_vector_relational.hpp \
+ ../../shared/include/glm/./gtc/../detail/func_vector_relational.inl \
+ ../../shared/include/glm/./gtc/../detail/func_common.hpp \
+ ../../shared/include/glm/./gtc/../detail/_fixes.hpp \
+ ../../shared/include/glm/./gtc/../detail/func_common.inl \
+ ../../shared/include/glm/./gtc/../exponential.hpp \
+ ../../shared/include/glm/./gtc/../vector_relational.hpp \
+ ../../shared/include/glm/./gtc/../common.hpp \
+ ../../shared/include/glm/./gtc/../vec2.hpp \
  ../../shared/include/glm/./gtc/integer.hpp \
+ ../../shared/include/glm/./gtc/../detail/func_integer.hpp \
+ ../../shared/include/glm/./gtc/../detail/func_integer.inl \
  ../../shared/include/glm/./gtc/integer.inl \
  ../../shared/include/glm/./gtc/matrix_access.hpp \
  ../../shared/include/glm/./gtc/matrix_access.inl \
  ../../shared/include/glm/./gtc/matrix_integer.hpp \
+ ../../shared/include/glm/./gtc/../mat2x2.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat2x2.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat2x2.inl \
+ ../../shared/include/glm/./gtc/../mat2x3.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat2x3.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat2x3.inl \
+ ../../shared/include/glm/./gtc/../mat2x4.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat2x4.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat2x4.inl \
+ ../../shared/include/glm/./gtc/../mat3x2.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat3x2.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat3x2.inl \
+ ../../shared/include/glm/./gtc/../mat3x4.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat3x4.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat3x4.inl \
+ ../../shared/include/glm/./gtc/../mat4x2.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat4x2.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat4x2.inl \
+ ../../shared/include/glm/./gtc/../mat4x3.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat4x3.hpp \
+ ../../shared/include/glm/./gtc/../detail/type_mat4x3.inl \
  ../../shared/include/glm/./gtc/matrix_inverse.hpp \
+ ../../shared/include/glm/./gtc/../matrix.hpp \
+ ../../shared/include/glm/./gtc/../detail/func_matrix.hpp \
+ ../../shared/include/glm/./gtc/../detail/func_matrix.inl \
  ../../shared/include/glm/./gtc/matrix_inverse.inl \
  ../../shared/include/glm/./gtc/matrix_transform.hpp \
  ../../shared/include/glm/./gtc/matrix_transform.inl \
@@ -101,6 +89,14 @@ Release/scene_lua.o: ../scene_lua.cpp ../scene_lua.hpp ../lua488.hpp \
  ../../shared/include/glm/./gtc/packing.hpp \
  ../../shared/include/glm/./gtc/type_precision.hpp \
  ../../shared/include/glm/./gtc/../gtc/vec1.hpp \
+ ../../shared/include/glm/./gtc/../gtc/../glm.hpp \
+ ../../shared/include/glm/./gtc/../gtc/../detail/_fixes.hpp \
+ ../../shared/include/glm/./gtc/../gtc/../packing.hpp \
+ ../../shared/include/glm/./gtc/../gtc/../detail/func_packing.hpp \
+ ../../shared/include/glm/./gtc/../gtc/../detail/func_packing.inl \
+ ../../shared/include/glm/./gtc/../gtc/../detail/type_half.hpp \
+ ../../shared/include/glm/./gtc/../gtc/../detail/type_half.inl \
+ ../../shared/include/glm/./gtc/../gtc/../integer.hpp \
  ../../shared/include/glm/./gtc/../gtc/vec1.inl \
  ../../shared/include/glm/./gtc/type_precision.inl \
  ../../shared/include/glm/./gtc/packing.inl \
@@ -218,185 +214,45 @@ Release/scene_lua.o: ../scene_lua.cpp ../scene_lua.hpp ../lua488.hpp \
  ../../shared/include/glm/./gtx/simd_mat4.hpp \
  ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.hpp \
  ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.inl \
- ../../shared/include/glm/./gtx/simd_mat4.inl ../GeometryNode.hpp \
- ../SceneNode.hpp ../Material.hpp ../JointNode.hpp ../PhongMaterial.hpp \
- ../Image.hpp ../A4.hpp
-
-../scene_lua.hpp:
-
-../lua488.hpp:
-
-../../shared/lua-5.3.1/src/lua.h:
-
-../../shared/lua-5.3.1/src/luaconf.h:
-
-../../shared/lua-5.3.1/src/lualib.h:
-
-../../shared/lua-5.3.1/src/lua.h:
-
-../../shared/lua-5.3.1/src/lauxlib.h:
-
-../Light.hpp:
-
-../../shared/include/glm/glm.hpp:
-
-../../shared/include/glm/detail/_fixes.hpp:
-
-../../shared/include/glm/fwd.hpp:
-
-../../shared/include/glm/detail/type_int.hpp:
-
-../../shared/include/glm/detail/setup.hpp:
-
-../../shared/include/glm/detail/type_float.hpp:
-
-../../shared/include/glm/detail/type_vec.hpp:
-
-../../shared/include/glm/detail/precision.hpp:
-
-../../shared/include/glm/detail/type_mat.hpp:
-
-../../shared/include/glm/vec2.hpp:
-
-../../shared/include/glm/detail/type_vec2.hpp:
-
-../../shared/include/glm/detail/type_vec2.inl:
-
-../../shared/include/glm/vec3.hpp:
-
-../../shared/include/glm/detail/type_vec3.hpp:
-
-../../shared/include/glm/detail/type_vec3.inl:
-
-../../shared/include/glm/vec4.hpp:
-
-../../shared/include/glm/detail/type_vec4.hpp:
-
-../../shared/include/glm/detail/type_vec4.inl:
-
-../../shared/include/glm/mat2x2.hpp:
-
-../../shared/include/glm/detail/type_mat2x2.hpp:
-
-../../shared/include/glm/detail/type_mat2x2.inl:
-
-../../shared/include/glm/mat2x3.hpp:
-
-../../shared/include/glm/detail/type_mat2x3.hpp:
-
-../../shared/include/glm/detail/type_mat2x3.inl:
-
-../../shared/include/glm/mat2x4.hpp:
-
-../../shared/include/glm/detail/type_mat2x4.hpp:
-
-../../shared/include/glm/detail/type_mat2x4.inl:
-
-../../shared/include/glm/mat3x2.hpp:
-
-../../shared/include/glm/detail/type_mat3x2.hpp:
-
-../../shared/include/glm/detail/type_mat3x2.inl:
-
-../../shared/include/glm/mat3x3.hpp:
-
-../../shared/include/glm/detail/type_mat3x3.hpp:
-
-../../shared/include/glm/detail/type_mat3x3.inl:
-
-../../shared/include/glm/mat3x4.hpp:
-
-../../shared/include/glm/detail/type_mat3x4.hpp:
-
-../../shared/include/glm/detail/type_mat3x4.inl:
-
-../../shared/include/glm/mat4x2.hpp:
-
-../../shared/include/glm/detail/type_mat4x2.hpp:
-
-../../shared/include/glm/detail/type_mat4x2.inl:
-
-../../shared/include/glm/mat4x3.hpp:
-
-../../shared/include/glm/detail/type_mat4x3.hpp:
-
-../../shared/include/glm/detail/type_mat4x3.inl:
-
-../../shared/include/glm/mat4x4.hpp:
-
-../../shared/include/glm/detail/type_mat4x4.hpp:
-
-../../shared/include/glm/detail/type_mat4x4.inl:
-
-../../shared/include/glm/trigonometric.hpp:
-
-../../shared/include/glm/detail/func_trigonometric.hpp:
-
-../../shared/include/glm/detail/func_trigonometric.inl:
-
-../../shared/include/glm/detail/_vectorize.hpp:
-
-../../shared/include/glm/detail/type_vec1.hpp:
-
-../../shared/include/glm/detail/type_vec1.inl:
-
-../../shared/include/glm/exponential.hpp:
-
-../../shared/include/glm/detail/func_exponential.hpp:
-
-../../shared/include/glm/detail/func_exponential.inl:
-
-../../shared/include/glm/detail/func_vector_relational.hpp:
-
-../../shared/include/glm/detail/func_vector_relational.inl:
-
-../../shared/include/glm/common.hpp:
-
-../../shared/include/glm/detail/func_common.hpp:
-
-../../shared/include/glm/detail/_fixes.hpp:
-
-../../shared/include/glm/detail/func_common.inl:
-
-../../shared/include/glm/packing.hpp:
-
-../../shared/include/glm/detail/func_packing.hpp:
-
-../../shared/include/glm/detail/func_packing.inl:
-
-../../shared/include/glm/detail/type_half.hpp:
-
-../../shared/include/glm/detail/type_half.inl:
-
-../../shared/include/glm/geometric.hpp:
-
-../../shared/include/glm/detail/func_geometric.hpp:
-
-../../shared/include/glm/detail/func_geometric.inl:
-
-../../shared/include/glm/matrix.hpp:
-
-../../shared/include/glm/detail/func_matrix.hpp:
-
-../../shared/include/glm/detail/func_matrix.inl:
-
-../../shared/include/glm/vector_relational.hpp:
-
-../../shared/include/glm/integer.hpp:
-
-../../shared/include/glm/detail/func_integer.hpp:
-
-../../shared/include/glm/detail/func_integer.inl:
-
-../Mesh.hpp:
-
-../Primitive.hpp:
+ ../../shared/include/glm/./gtx/simd_mat4.inl
 
 ../Ray.hpp:
 
 ../../shared/include/glm/ext.hpp:
 
 ../../shared/include/glm/./gtc/bitfield.hpp:
+
+../../shared/include/glm/./gtc/../detail/setup.hpp:
+
+../../shared/include/glm/./gtc/../detail/precision.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_int.hpp:
+
+../../shared/include/glm/./gtc/../detail/_vectorize.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_vec1.hpp:
+
+../../shared/include/glm/./gtc/../detail/../fwd.hpp:
+
+../../shared/include/glm/./gtc/../detail/../detail/type_float.hpp:
+
+../../shared/include/glm/./gtc/../detail/../detail/type_vec.hpp:
+
+../../shared/include/glm/./gtc/../detail/../detail/type_mat.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_vec1.inl:
+
+../../shared/include/glm/./gtc/../detail/type_vec2.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_vec2.inl:
+
+../../shared/include/glm/./gtc/../detail/type_vec3.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_vec3.inl:
+
+../../shared/include/glm/./gtc/../detail/type_vec4.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_vec4.inl:
 
 ../../shared/include/glm/./gtc/bitfield.inl:
 
@@ -410,9 +266,63 @@ Release/scene_lua.o: ../scene_lua.cpp ../scene_lua.hpp ../lua488.hpp \
 
 ../../shared/include/glm/./gtc/quaternion.hpp:
 
+../../shared/include/glm/./gtc/../mat3x3.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat3x3.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat3x3.inl:
+
+../../shared/include/glm/./gtc/../mat4x4.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat4x4.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat4x4.inl:
+
+../../shared/include/glm/./gtc/../vec3.hpp:
+
+../../shared/include/glm/./gtc/../vec4.hpp:
+
 ../../shared/include/glm/./gtc/quaternion.inl:
 
+../../shared/include/glm/./gtc/../trigonometric.hpp:
+
+../../shared/include/glm/./gtc/../detail/func_trigonometric.hpp:
+
+../../shared/include/glm/./gtc/../detail/func_trigonometric.inl:
+
+../../shared/include/glm/./gtc/../geometric.hpp:
+
+../../shared/include/glm/./gtc/../detail/func_geometric.hpp:
+
+../../shared/include/glm/./gtc/../detail/func_geometric.inl:
+
+../../shared/include/glm/./gtc/../detail/func_exponential.hpp:
+
+../../shared/include/glm/./gtc/../detail/func_exponential.inl:
+
+../../shared/include/glm/./gtc/../detail/func_vector_relational.hpp:
+
+../../shared/include/glm/./gtc/../detail/func_vector_relational.inl:
+
+../../shared/include/glm/./gtc/../detail/func_common.hpp:
+
+../../shared/include/glm/./gtc/../detail/_fixes.hpp:
+
+../../shared/include/glm/./gtc/../detail/func_common.inl:
+
+../../shared/include/glm/./gtc/../exponential.hpp:
+
+../../shared/include/glm/./gtc/../vector_relational.hpp:
+
+../../shared/include/glm/./gtc/../common.hpp:
+
+../../shared/include/glm/./gtc/../vec2.hpp:
+
 ../../shared/include/glm/./gtc/integer.hpp:
+
+../../shared/include/glm/./gtc/../detail/func_integer.hpp:
+
+../../shared/include/glm/./gtc/../detail/func_integer.inl:
 
 ../../shared/include/glm/./gtc/integer.inl:
 
@@ -422,7 +332,55 @@ Release/scene_lua.o: ../scene_lua.cpp ../scene_lua.hpp ../lua488.hpp \
 
 ../../shared/include/glm/./gtc/matrix_integer.hpp:
 
+../../shared/include/glm/./gtc/../mat2x2.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat2x2.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat2x2.inl:
+
+../../shared/include/glm/./gtc/../mat2x3.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat2x3.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat2x3.inl:
+
+../../shared/include/glm/./gtc/../mat2x4.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat2x4.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat2x4.inl:
+
+../../shared/include/glm/./gtc/../mat3x2.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat3x2.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat3x2.inl:
+
+../../shared/include/glm/./gtc/../mat3x4.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat3x4.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat3x4.inl:
+
+../../shared/include/glm/./gtc/../mat4x2.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat4x2.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat4x2.inl:
+
+../../shared/include/glm/./gtc/../mat4x3.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat4x3.hpp:
+
+../../shared/include/glm/./gtc/../detail/type_mat4x3.inl:
+
 ../../shared/include/glm/./gtc/matrix_inverse.hpp:
+
+../../shared/include/glm/./gtc/../matrix.hpp:
+
+../../shared/include/glm/./gtc/../detail/func_matrix.hpp:
+
+../../shared/include/glm/./gtc/../detail/func_matrix.inl:
 
 ../../shared/include/glm/./gtc/matrix_inverse.inl:
 
@@ -441,6 +399,22 @@ Release/scene_lua.o: ../scene_lua.cpp ../scene_lua.hpp ../lua488.hpp \
 ../../shared/include/glm/./gtc/type_precision.hpp:
 
 ../../shared/include/glm/./gtc/../gtc/vec1.hpp:
+
+../../shared/include/glm/./gtc/../gtc/../glm.hpp:
+
+../../shared/include/glm/./gtc/../gtc/../detail/_fixes.hpp:
+
+../../shared/include/glm/./gtc/../gtc/../packing.hpp:
+
+../../shared/include/glm/./gtc/../gtc/../detail/func_packing.hpp:
+
+../../shared/include/glm/./gtc/../gtc/../detail/func_packing.inl:
+
+../../shared/include/glm/./gtc/../gtc/../detail/type_half.hpp:
+
+../../shared/include/glm/./gtc/../gtc/../detail/type_half.inl:
+
+../../shared/include/glm/./gtc/../gtc/../integer.hpp:
 
 ../../shared/include/glm/./gtc/../gtc/vec1.inl:
 
@@ -677,17 +651,3 @@ Release/scene_lua.o: ../scene_lua.cpp ../scene_lua.hpp ../lua488.hpp \
 ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.inl:
 
 ../../shared/include/glm/./gtx/simd_mat4.inl:
-
-../GeometryNode.hpp:
-
-../SceneNode.hpp:
-
-../Material.hpp:
-
-../JointNode.hpp:
-
-../PhongMaterial.hpp:
-
-../Image.hpp:
-
-../A4.hpp:
