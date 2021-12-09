@@ -24,17 +24,30 @@ struct Triangle
 		, v2( pv2 )
 		, v3( pv3 )
 	{}
+	bool contains(size_t o1, size_t o2, size_t o3){
+		bool f1 = v1 == o1 || v1 == o2 || v1 == o3;
+		bool f2 = v2 == o1 || v2 == o2 || v2 == o3;
+		bool f3 = v3 == o1 || v3 == o2 || v3 == o3;
+		// return ((f1 && f2 )||(f1&&f3)|| (f3&&f2) )
+		return f1 || f2 || f3;
+	}
+	bool contains(size_t o1){
+		bool f1 = v1 == o1 || v2 == o1 || v3 == o1;
+		return f1 ;
+	}
 };
 
 // A polygonal mesh.
 class Mesh : public Primitive {
 public:
   Mesh( const std::string& fname );
-  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
-  virtual glm::vec3 normal(glm::vec3 intersect);
+  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray);
 private:
 	std::vector<glm::vec3> m_vertices;
 	std::vector<Triangle> m_faces;
-	int matchedFace;
+	std::vector<glm::vec3> vertexNormals;
+	std::vector<glm::vec3> faceNormals;
+	bool isInterpolated = true;
     friend std::ostream& operator<<(std::ostream& out, const Mesh& mesh);
+
 };

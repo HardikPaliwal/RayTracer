@@ -5,10 +5,12 @@ red = gr.material({0.366046, 0.037182, 0.041638}, {0, 0, 0}, 0, "", "")
 green = gr.material({0.162928, 0.408903, 0.083375}, {0, 0, 0}, 0, "", "")
 white = gr.material({0.740063, 0.742313, 0.733934}, {0, 0, 0}, 0, "", "")
 mat1 = gr.material({0.7, 1.0, 0.7}, {0.5, 0.7, 0.5}, 6.666, "", "")
+blue = gr.material({0.0, 0.50980392, 0.50980392}, {0.50196078, 0.50196078, 0.50196078}, 32,"", "")
 
 wood = gr.material({0.5, 0.5, 0.5}, {0, 0, 0}, 0, "wood_texture.png", "wood_normal.png")
 brick = gr.material({0.5, 0.5, 0.5}, {0, 0, 0}, 0, "brick_texture.png", "brick_normal.png")
 
+mirror = gr.material({0,0,0}, {1, 1, 1}, 50000000, "", "")
 
 
 scene_root = gr.node('scene')
@@ -48,7 +50,7 @@ plane = gr.mesh( 'plane', 'plane.obj' )
 plane:rotate("y", 90)
 plane:translate(-1,-1,5)
 scene_root:add_child(plane)
-plane:set_material(brick)
+plane:set_material(blue)
 plane:scale(20, 20, 20)
 
 
@@ -57,7 +59,7 @@ plane2:translate(-1,-1,20)
 plane2:rotate("z", 90)
 plane2:rotate("y", 90)
 scene_root:add_child(plane2)
-plane2:set_material(wood)
+plane2:set_material(white)
 plane2:scale(20, 20, 20)
 
 plane3 = gr.mesh( 'plane3', 'plane.obj' )
@@ -73,7 +75,7 @@ plane4:translate(-5,-1,11)
 plane4:rotate("z", 90)
 plane4:rotate("y", 180)
 scene_root:add_child(plane4)
-plane4:set_material(red)
+plane4:set_material(green)
 plane4:scale(15, 15, 15)
 
 -- plane5 = gr.mesh( 'plane5', 'plane.obj' )
@@ -85,12 +87,18 @@ plane4:scale(15, 15, 15)
 
 s = gr.sphere('s')
 scene_root:add_child(s)
-s:set_material(green)
-s:translate(0, 0, 8)
+s:set_material(mirror)
+s:translate(0, 2, 8)
+
+-- teapot =  gr.mesh( 'teapot', 'teapot.obj' )
+-- scene_root:add_child(teapot)
+-- teapot:set_material(red)
+-- teapot:translate(0, 2, 8)
+
 
 white_light = gr.light({1, 8, 0}, {0.9, 0.9, 0.9}, {1, 0, 0})
 
 
-gr.render(scene_root, 'test.png', 300, 300,
+gr.render(scene_root, 'test.png', 100, 100,
 	  {0, 2, 0}, {0, 2, 5}, {0, 1, 0}, 50,
 	  {0.3, 0.3, 0.3}, {white_light})

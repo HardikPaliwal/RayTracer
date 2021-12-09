@@ -10,7 +10,7 @@
 using namespace std;
 
 
-std::vector<GeometryNode *> objects;
+std::vector<GeometryNode *> objectGlobal;
 std::map<string, Image> mappings = {};
 Image resultImage;
 std::list<const Light *> globalLights;
@@ -38,20 +38,8 @@ void applyRecursiveTransforms(SceneNode * node, glm::mat4 trans){
 		// node->set_transform( newTrans  );
 		// newTrans = glm::scale(newTrans, glm::vec3(1/node->scaleStored.x, 1/node->scaleStored.y, 1/node->scaleStored.z));
 		GeometryNode *newNode= static_cast<GeometryNode *> (node);
-		// if (newNode->m_material != nullptr){
-		// 	PhongMaterial* pMaterial = static_cast<PhongMaterial*>(newNode->m_material);
-		// 	if(pMaterial->textureMapping != ""){
-		// 		// Image i = Image(1024, 1024);
-		// 		// i.loadPng(pMaterial->textureMapping);
-		// 	}
-		// 	if (pMaterial->normalMapping != ""){
-		// 		// Image i = Image(1024, 1024);
-		// 		// i.loadPng(pMaterial->normalMapping);
-		// 	}
 
-		// }
-
-		objects.push_back(newNode);
+		objectGlobal.push_back(newNode);
 		for (SceneNode * child : node->children) {
 			// child->scale(node->scaleStored);
 			applyRecursiveTransforms( child, newTrans);
@@ -59,7 +47,7 @@ void applyRecursiveTransforms(SceneNode * node, glm::mat4 trans){
 
 }
 
-std::vector<glm::vec3> hit(glm::vec3 eye, glm::vec3 direction, GeometryNode *&closestObject, bool breakEarly){
+std::vector<glm::vec3> hit(glm::vec3 eye, glm::vec3 direction, GeometryNode *&closestObject, bool breakEarly,std::vector<GeometryNode *> &objects){
 	double near  = 100000000;
 	std::vector<glm::vec3> interSectionInfo;
 	for (int i = 0; i < objects.size(); i++){
@@ -68,7 +56,7 @@ std::vector<glm::vec3> hit(glm::vec3 eye, glm::vec3 direction, GeometryNode *&cl
 		glm::vec3 transformedEye =  xyz(objects[i]->invtrans * glm::vec4(eye, 1.0));
 		glm::vec3 transformedDirection = xyz(objects[i]->invtrans * (glm::vec4(direction, 0.0)));
 		try{
-			std::vector<glm::vec3> result = objects[i]->m_primitive->intersection(transformedEye, transformedDirection,!breakEarly);
+			std::vector<glm::vec3> result = objects[i]->m_primitive->intersection(transformedEye, transformedDirection);
 			double t = result[0].x;
 			if (t < near) {
 				near = t;
@@ -82,23 +70,23 @@ std::vector<glm::vec3> hit(glm::vec3 eye, glm::vec3 direction, GeometryNode *&cl
 	return interSectionInfo;
 }
 
-glm::vec3 iterate(glm::vec3 eye, glm::vec3 direction, int maxBounces);
+glm::vec3 iterate(glm::vec3 eye, glm::vec3 direction, int maxBounces,std::vector<GeometryNode *> &objects);
 
 glm::vec3 shade(glm::vec3 intersection, glm::vec3 normal, PhongMaterial *pMaterial, 
-			int maxBounces, glm::vec3 &uvCoordinates, glm::vec3 &t1, glm::vec3 &t2){
-	float lightIntensity = 250.7;
+			int maxBounces, glm::vec3 &uvCoordinates, glm::vec3 &t1, glm::vec3 &t2, std::vector<GeometryNode *> objects){
+	float lightIntensity = 100.7;
 	glm::vec3 finalColour = glm::vec3(0.0);
 
 	for(const auto& light : globalLights){
 		GeometryNode * inBetween = NULL;
 		glm::vec3 betweenLightAndPoint = glm::normalize( light->position - intersection);
-		hit(intersection, betweenLightAndPoint, inBetween, false);
+		hit(intersection, betweenLightAndPoint, inBetween, false, objects);
 		if (inBetween != NULL) continue; //Hit something so dont calculate the colour
 
 		if (pMaterial->m_shininess == 6.666 && maxBounces!=0) { //special shiny value to make an object reflective
 			glm::vec3 reflectingRay = 2 * (glm::dot(betweenLightAndPoint, normal) * normal) + betweenLightAndPoint;
 			maxBounces--;
-			finalColour += 0.4 * iterate(intersection, reflectingRay,  maxBounces);
+			finalColour +=  iterate(intersection, reflectingRay,  maxBounces, objects);
 		}
 		
 		if (pMaterial->textureMapping != ""){
@@ -106,14 +94,14 @@ glm::vec3 shade(glm::vec3 intersection, glm::vec3 normal, PhongMaterial *pMateri
 			int y = (int)(1024*uvCoordinates.y);
 			finalColour += glm::vec3(mappings[pMaterial->textureMapping](x,y, 0), mappings[pMaterial->textureMapping](x,y, 1),
 									mappings[pMaterial->textureMapping](x,y, 2));
-
+			
 		}
 		if (pMaterial->normalMapping != ""){
-			int x = ((int)(1024*uvCoordinates.x));
-			int y = ((int)(1024*uvCoordinates.y)) ;
+			int x = ((int)(mappings[pMaterial->textureMapping].width()*uvCoordinates.x));
+			int y = ((int)(mappings[pMaterial->textureMapping].height()*uvCoordinates.y)) ;
 			glm::vec3 col = glm::vec3(mappings[pMaterial->textureMapping](x,y, 0), mappings[pMaterial->textureMapping](x,y, 1),
 									mappings[pMaterial->textureMapping](x,y, 2));
-			normal = glm::normalize(normal + col.y * t1 + col.z*t2);
+			normal = glm::normalize(normal + col.x * glm::cross(t1, normal) + col.y*glm::cross(t2, normal));
 			
 		} 
 		float distance = glm::distance(intersection, light->position);
@@ -123,9 +111,9 @@ glm::vec3 shade(glm::vec3 intersection, glm::vec3 normal, PhongMaterial *pMateri
 	return finalColour;
 }
 
-glm::vec3 iterate(glm::vec3 eye, glm::vec3 direction,  int maxBounces){
+glm::vec3 iterate(glm::vec3 eye, glm::vec3 direction,  int maxBounces,std::vector<GeometryNode *> &objects){
 	GeometryNode * closestObject =NULL;
-	std::vector<glm::vec3> stuff = hit(eye, direction, closestObject, false);
+	std::vector<glm::vec3> stuff = hit(eye, direction, closestObject, false, objects);
 
 	double near = stuff[0].x;
 	glm::vec3 objNormal = stuff[1];
@@ -141,11 +129,47 @@ glm::vec3 iterate(glm::vec3 eye, glm::vec3 direction,  int maxBounces){
 		if (stuff.size() >= 3) {
 			uvCoordinates = stuff[2];
 			t1 = glm::normalize(glm::transpose(glm::mat3(closestObject->invtrans)) * stuff[3]);
-			t2 =glm::normalize( glm::transpose(glm::mat3(closestObject->invtrans)) *  stuff[4]);
+			t2 = glm::normalize( glm::transpose(glm::mat3(closestObject->invtrans)) *  stuff[4]);
 		}
-		colour+= globalAmbient + shade(intersection, normal, pMaterial, maxBounces, uvCoordinates, t1, t2);
+		colour+= globalAmbient + shade(intersection, normal, pMaterial, maxBounces, uvCoordinates, t1, t2, objects);
 	}
 	return colour;
+}
+
+//Takes in x (column we operate on) and y (rows  operate on)
+void multiThreadedIterate(int start, int end, int width, int height, int imageWidth, 
+				int imageHeight, int d, bool antiAliasing, int superSample, glm::vec3 eye, glm::vec3 u, glm::vec3 v, glm::vec3 w,
+				std::vector<GeometryNode *> objects){
+	for (uint y = start; y < end; ++y) {	
+		for (uint x = 0; x < width; ++x) {
+			glm::vec3 colour;
+			if (antiAliasing){
+				for (int i = 0; i < superSample; i++){
+					float xOffset = x+ i/superSample;
+					for (int j = 0; j< superSample; j++){
+						float yOffset = y+ i/superSample;
+
+						glm::vec3 pixel = glm::vec3(imageWidth * ((float) (xOffset/width)  -0.5), imageHeight * ((float)(yOffset /height)-0.5),d/2);
+						glm::vec3 pixelInWorld = pixel.x * u + pixel.y * v + pixel.z * w + eye;
+						glm::vec3 direction = glm::normalize(eye-pixelInWorld) ;
+
+						colour += iterate(eye, direction,2, objects);
+					}
+				}
+				colour /= superSample*superSample;
+			} else {
+				float xOffset = x+ 0.5;
+				float yOffset = y+ 0.5;
+				glm::vec3 pixel = glm::vec3(imageWidth * ((float) (xOffset/width)  -0.5), imageHeight * ((float)(yOffset /height)-0.5),d/2);
+				glm::vec3 pixelInWorld = pixel.x * u + pixel.y * v + pixel.z * w + eye;
+				glm::vec3 direction = glm::normalize(eye-pixelInWorld) ;
+				colour = iterate(eye, direction,  2, objects);
+			}
+			resultImage(width-x, y, 0) = (double)colour.x;
+			resultImage(width-x, y, 1) = (double)colour.y;
+			resultImage(width-x, y, 2) = (double)colour.z;
+		}
+	}
 }
 void A4_Render(
 		// What to render  
@@ -210,42 +234,19 @@ void A4_Render(
 		k.loadPng(listOfImages[i]);
 		mappings.insert ( std::pair<string, Image>(listOfImages[i],  k));
 	}
-	// #pragma omp parallel for schedule(dynamic, 1) private(r)       // OpenMP
 	std::vector<std::thread> threads;
- 
-	for (uint y = 0; y < height; ++y) {
-		for (uint x = 0; x < width; ++x) {
-			glm::vec3 colour;
-			if (antiAliasing){
-				for (int i = 0; i < superSample; i++){
-					float xOffset = x+ i/superSample;
-					for (int j = 0; j< superSample; j++){
-						float yOffset = y+ i/superSample;
 
-						glm::vec3 pixel = glm::vec3(imageWidth * ((float) (xOffset/width)  -0.5), imageHeight * ((float)(yOffset /height)-0.5),d/2);
-						glm::vec3 pixelInWorld = pixel.x * u + pixel.y * v + pixel.z * w + eye;
-						glm::vec3 direction = glm::normalize(eye-pixelInWorld) ;
-
-						colour += iterate(eye, direction,2);
-					}
-				}
-				colour /= superSample*superSample;
-			} else {
-				float xOffset = x+ 0.5;
-				float yOffset = y+ 0.5;
-				glm::vec3 pixel = glm::vec3(imageWidth * ((float) (xOffset/width)  -0.5), imageHeight * ((float)(yOffset /height)-0.5),d/2);
-				glm::vec3 pixelInWorld = pixel.x * u + pixel.y * v + pixel.z * w + eye;
-				glm::vec3 direction = glm::normalize(eye-pixelInWorld) ;
-				colour = iterate(eye, direction,  2);
-			}
-
-			image(width-x, y, 0) = (double)colour.x;
-			// Green: 
-			image(width-x, y, 1) = (double)colour.y;
-			// Blue: 
-			image(width-x, y, 2) = (double)colour.z;
-		}
+	for (uint index = 1; index <= numberOfThreads; index++ ){
+		// std::vector<GeometryNode*> objectsNew;
+		// for (int i = 0; i < objectGlobal.size();i++){
+		// 	GeometryNode *node = new GeometryNode(objectGlobal[i]->name, objectGlobal[i]->name);
+		// 	objectsNew.push_back(node);
+		// }
+		threads.push_back(std::thread(
+			multiThreadedIterate, (index-1) * height/numberOfThreads, index *height/numberOfThreads,
+								width, height, imageWidth, imageHeight, d, antiAliasing, superSample, eye, u, v, w, objectGlobal
+								));
 	}
 	for (auto& th : threads)  th.join();
-	// image = resultImage;
+	image = resultImage;
 }

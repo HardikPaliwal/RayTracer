@@ -6,8 +6,7 @@
 class Primitive {
 public:
   virtual ~Primitive();
-  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal) =0;
-  virtual glm::vec3 normal(glm::vec3 intersect)=0;
+  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray) =0;
   virtual void setOrigin(glm::vec3 origin);
 
 };
@@ -15,8 +14,8 @@ public:
 class Sphere : public Primitive {
 public:
   virtual ~Sphere();
-  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
-  virtual glm::vec3 normal(glm::vec3 intersect);
+  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray);
+
   virtual void setOrigin(glm::vec3 origin);
 
   glm::vec3 m_pos =glm::vec3(0.0);
@@ -26,8 +25,7 @@ public:
 class Cube : public Primitive {
 public:
   virtual ~Cube();
-  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
-  virtual glm::vec3 normal(glm::vec3 intersect);
+  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray);
   virtual void setOrigin(glm::vec3 origin);
 
   glm::vec3 m_pos=  glm::vec3(0.0);
@@ -43,8 +41,7 @@ public:
   {
   }
   virtual ~NonhierSphere();
-  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
-  virtual glm::vec3 normal(glm::vec3 intersect);
+  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray);
 
 private:
   glm::vec3 m_pos;
@@ -57,10 +54,10 @@ public:
     : m_pos(pos), m_size(size)
   {
   }
+
   
   virtual ~NonhierBox();
-  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
-  virtual glm::vec3 normal(glm::vec3 intersect);
+  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray);
 
 private:
   glm::vec3 m_pos;
@@ -68,18 +65,16 @@ private:
   glm::vec3 normalStored;
 };
 
-// class Plane : public Primitive {
-//   public:
-//     Plane(const glm::vec3& pos, double size): m_pos(pos), m_size(size)
-//   {
-//   }
+class Plane : public Primitive {
+  public:
+    Plane(const glm::vec3& pos, double size): m_pos(pos), m_size(size)
+  {
+  }
   
-//   virtual ~Plane();
-//   virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray, bool storeNormal);
-//   virtual glm::vec3 normal(glm::vec3 intersect);
+  virtual ~Plane();
+  virtual std::vector<glm::vec3> intersection(glm::vec3 origin, glm::vec3 ray);
 
-// private:
-//   glm::vec3 m_pos;
-//   double m_size;
-//   glm::vec3 normalStored;
-// };
+private:
+  glm::vec3 m_pos;
+  double m_size;
+};

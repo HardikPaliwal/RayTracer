@@ -15,9 +15,10 @@
 
 using namespace std;
  
-std::vector<glm::vec3> Mesh::intersection(glm::vec3 o, glm::vec3 d, bool storeNormal){
+std::vector<glm::vec3> Mesh::intersection(glm::vec3 o, glm::vec3 d){
 	float closest = 1000000000;
 	int faceIndex = 0;
+	glm::vec3 weights = glm::vec3(weights);
     for (int i = 0; i < m_faces.size(); i++){
 		glm::vec3 a =  m_vertices[m_faces[i].v1];
 		glm::vec3 b = m_vertices[m_faces[i].v2];
@@ -30,8 +31,8 @@ std::vector<glm::vec3> Mesh::intersection(glm::vec3 o, glm::vec3 d, bool storeNo
 		float gamma = 1- (answer.x + answer.y);
 		if (answer.z < closest && answer.z > 0.1 && answer.x > 0 && answer.x < 1 && answer.y>0 && answer.y <1 && gamma > 0 && gamma < 1){
 			closest = answer.z;
-			if (storeNormal)  matchedFace = i;  	//Store variables that'll help us calculate the normal later on
 			faceIndex = i;
+			weights = glm::vec3(answer.x, answer.y, gamma);
 		}
 	}
 
@@ -39,19 +40,20 @@ std::vector<glm::vec3> Mesh::intersection(glm::vec3 o, glm::vec3 d, bool storeNo
 	
 
 	glm::vec3 intersect = o + d*closest;
-	glm::vec3 u = m_vertices[m_faces[faceIndex].v2] - intersect;
-	glm::vec3 v = m_vertices[m_faces[faceIndex].v3] - intersect;
+	glm::vec3 t1 = m_vertices[m_faces[faceIndex].v2] - intersect;
+	glm::vec3 t2 = m_vertices[m_faces[faceIndex].v3] - intersect;
+
+	glm::vec3 normal = faceNormals[faceIndex];
+	if (isInterpolated){
+		normal = weights.x* vertexNormals[m_faces[faceIndex].v2] +weights.y* vertexNormals[m_faces[faceIndex].v3] +
+				weights.z* vertexNormals[m_faces[faceIndex].v1];
+	} 
 	intersect.x = intersect.x+1;
 	intersect.y = intersect.z +1;
 	intersect.z = 0;
-	return std::vector<glm::vec3> {glm::vec3(closest),glm::normalize(glm::cross(u,v)), intersect/2, u, v};
-}
-glm::vec3  Mesh::normal(glm::vec3 intersect){
-	glm::vec3 u = m_vertices[m_faces[matchedFace].v2] - intersect;
-	glm::vec3 v = m_vertices[m_faces[matchedFace].v3] - intersect;
-	return glm::normalize(glm::cross(u,v));
-}
 
+	return std::vector<glm::vec3> {glm::vec3(closest),normal, intersect/2, t1, t2};
+}
 
 Mesh::Mesh( const std::string& fname )
 	: m_vertices()
@@ -70,6 +72,19 @@ Mesh::Mesh( const std::string& fname )
 			ifs >> s1 >> s2 >> s3;
 			m_faces.push_back( Triangle( s1 - 1, s2 - 1, s3 - 1 ) );
 		}
+	}
+	for (int i = 0; i < m_faces.size(); i++){
+		glm::vec3 u = m_vertices[m_faces[i].v2] - m_vertices[m_faces[i].v1];
+		glm::vec3 v = m_vertices[m_faces[i].v3] - m_vertices[m_faces[i].v1];
+		faceNormals.push_back(glm::normalize(glm::cross(u,v)));
+	}
+
+	for (int i = 0; i < m_vertices.size(); i++){
+		glm::vec3 average = glm::vec3(0);
+		for(int k = 0; k < m_faces.size(); k++){
+			if (m_faces[k].contains(i)) average += faceNormals[k];
+		}
+		vertexNormals.push_back(glm::normalize(average));
 	}
 }
 
