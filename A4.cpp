@@ -15,6 +15,7 @@ std::map<string, Image> mappings = {};
 Image resultImage;
 std::list<const Light *> globalLights;
 glm::vec3 globalAmbient;
+int globalSamples = 5;
 
 //Cause the glm version isn't working =(
 glm::vec3  xyz(glm::vec4 thing){
@@ -31,14 +32,11 @@ void applyRecursiveTransforms(SceneNode * node, glm::mat4 trans){
 		newTrans = glm::rotate(newTrans, node->rotationStored.y, glm::vec3(0.f,1.f,0.f));
 		newTrans = glm::rotate(newTrans, node->rotationStored.z, glm::vec3(0.f,0.f,1.f));
 		node->set_transform( glm::scale(newTrans,node->scaleStored));
-
-
 		// glm::mat4 newTrans = trans * node->get_transform();
 
 		// node->set_transform( newTrans  );
 		// newTrans = glm::scale(newTrans, glm::vec3(1/node->scaleStored.x, 1/node->scaleStored.y, 1/node->scaleStored.z));
 		GeometryNode *newNode= static_cast<GeometryNode *> (node);
-
 		objectGlobal.push_back(newNode);
 		for (SceneNode * child : node->children) {
 			// child->scale(node->scaleStored);
@@ -70,10 +68,21 @@ std::vector<glm::vec3> hit(glm::vec3 eye, glm::vec3 direction, GeometryNode *&cl
 	return interSectionInfo;
 }
 
+// glm::vec3 uniformHSample(){
+// 	float r1= glm::linearRand(0,1);
+// 	float r2 = glm::linearRand(0,1);
+
+// 	float sinTheta = glm::sqrt(1 - r1 * r1); 
+//     float phi = 2 * glm::pi<float>() * r2; 
+//     float x = sinTheta * glm::cos(phi); 
+//     float z = sinTheta * glm::sin(phi); 
+//     return glm::vec3(x, u1, z); 
+// }
 glm::vec3 iterate(glm::vec3 eye, glm::vec3 direction, int maxBounces,std::vector<GeometryNode *> &objects);
 
-glm::vec3 shade(glm::vec3 intersection, glm::vec3 normal, PhongMaterial *pMaterial, 
-			int maxBounces, glm::vec3 &uvCoordinates, glm::vec3 &t1, glm::vec3 &t2, std::vector<GeometryNode *> objects){
+glm::vec3 shade(glm::vec3 intersection, glm::vec3 normal,glm::vec3 eye, PhongMaterial *pMaterial, 
+			int maxBounces, glm::vec3 &uvCoordinates, glm::vec3 &t1, glm::vec3 &t2, std::vector<GeometryNode *> objects
+			){
 	float lightIntensity = 100.7;
 	glm::vec3 finalColour = glm::vec3(0.0);
 
@@ -81,32 +90,46 @@ glm::vec3 shade(glm::vec3 intersection, glm::vec3 normal, PhongMaterial *pMateri
 		GeometryNode * inBetween = NULL;
 		glm::vec3 betweenLightAndPoint = glm::normalize( light->position - intersection);
 		hit(intersection, betweenLightAndPoint, inBetween, false, objects);
-		if (inBetween != NULL) continue; //Hit something so dont calculate the colour
+		if (inBetween != NULL) continue; //Point is in Shadow
+		
+		// TEXTURE MAPPING
+		if (pMaterial->textureMapping != ""){
+			int x = (int)(1024*uvCoordinates.x);
+			int y = (int)(1024*uvCoordinates.y);
+			finalColour += glm::vec3(mappings[pMaterial->textureMapping](x,y, 0), mappings[pMaterial->textureMapping](x,y, 1),
+									mappings[pMaterial->textureMapping](x,y, 2));
+		}
+		// BUMP MAPPING
+		if (pMaterial->normalMapping != ""){
+			int x = ((int)(mappings[pMaterial->normalMapping].width()*uvCoordinates.x));
+			int y = ((int)(mappings[pMaterial->normalMapping].height()*uvCoordinates.y)) ;
+			glm::vec3 col = glm::vec3(mappings[pMaterial->normalMapping](x,y, 0), mappings[pMaterial->normalMapping](x,y, 1),
+									mappings[pMaterial->normalMapping](x,y, 2));
+			normal = glm::normalize(normal + col.x * glm::cross(t1, normal) + col.y*glm::cross(t2, normal));
+		} 
 
 		if (pMaterial->m_shininess == 6.666 && maxBounces!=0) { //special shiny value to make an object reflective
 			glm::vec3 reflectingRay = 2 * (glm::dot(betweenLightAndPoint, normal) * normal) + betweenLightAndPoint;
 			maxBounces--;
 			finalColour +=  iterate(intersection, reflectingRay,  maxBounces, objects);
 		}
-		
-		if (pMaterial->textureMapping != ""){
-			int x = (int)(1024*uvCoordinates.x);
-			int y = (int)(1024*uvCoordinates.y);
-			finalColour += glm::vec3(mappings[pMaterial->textureMapping](x,y, 0), mappings[pMaterial->textureMapping](x,y, 1),
-									mappings[pMaterial->textureMapping](x,y, 2));
-			
-		}
-		if (pMaterial->normalMapping != ""){
-			int x = ((int)(mappings[pMaterial->textureMapping].width()*uvCoordinates.x));
-			int y = ((int)(mappings[pMaterial->textureMapping].height()*uvCoordinates.y)) ;
-			glm::vec3 col = glm::vec3(mappings[pMaterial->textureMapping](x,y, 0), mappings[pMaterial->textureMapping](x,y, 1),
-									mappings[pMaterial->textureMapping](x,y, 2));
-			normal = glm::normalize(normal + col.x * glm::cross(t1, normal) + col.y*glm::cross(t2, normal));
-			
-		} 
+
+
+
 		float distance = glm::distance(intersection, light->position);
-		glm::vec3 tmp= (1/(distance*distance))*light->colour * lightIntensity*pMaterial->m_kd  * glm::max(0.0f,glm::abs(glm::dot(normal,  betweenLightAndPoint)));
-		finalColour += tmp;
+		glm::vec3 diffuse= (1/(distance*distance))*light->colour * lightIntensity*pMaterial->m_kd  * glm::max(0.0f,glm::dot(normal,  betweenLightAndPoint));
+
+		glm::vec3 h = glm::normalize(betweenLightAndPoint + (eye - intersection));
+		glm::vec3 specular = light->colour * pMaterial->m_ks * glm::pow(glm::max(0.0f, glm::dot(normal, h)), pMaterial->m_shininess);
+
+		glm::vec3 pathTracing = glm::vec3(0);
+		for (int i = 0; i < globalSamples; i++){
+			// glm:: vec3 random = uniformHSample();
+			// pathTracing += iterate(intersection, random, maxBounces-1, objects );
+		}
+
+		finalColour += diffuse;
+		finalColour += specular;
 	}
 	return finalColour;
 }
@@ -131,7 +154,7 @@ glm::vec3 iterate(glm::vec3 eye, glm::vec3 direction,  int maxBounces,std::vecto
 			t1 = glm::normalize(glm::transpose(glm::mat3(closestObject->invtrans)) * stuff[3]);
 			t2 = glm::normalize( glm::transpose(glm::mat3(closestObject->invtrans)) *  stuff[4]);
 		}
-		colour+= globalAmbient + shade(intersection, normal, pMaterial, maxBounces, uvCoordinates, t1, t2, objects);
+		colour+= globalAmbient + shade(intersection, normal, eye, pMaterial, maxBounces, uvCoordinates, t1, t2, objects);
 	}
 	return colour;
 }
@@ -186,7 +209,9 @@ void A4_Render(
 
 		// Lighting parameters  
 		const glm::vec3 & ambient,
-		const std::list<Light *> & lights
+		const std::list<Light *> & lights,
+		int superSample,
+		int numberOfThreads, int pathTracingSamples
 ) {
 
   // Fill in raytracing code here...  
@@ -224,10 +249,10 @@ void A4_Render(
   	const double imageHeight = d/2* glm::tan(fovy);
   	const double imageWidth = (width / height) * imageHeight;
 
-	bool antiAliasing = false;
-	float superSample = 2;
-	bool isMultiThreaded = false;
-	int numberOfThreads = 4;
+	globalSamples = pathTracingSamples;
+	bool antiAliasing = true;
+	if (superSample == 1) antiAliasing = false;
+
 	std::vector<string> listOfImages = {"brick_texture.png", "brick_normal.png", "wood_texture.png", "wood_texture.png"};
 	for (int i = 0; i < listOfImages.size(); i++){
 		Image k = Image(1024,1024);

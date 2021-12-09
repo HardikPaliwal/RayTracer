@@ -7,9 +7,13 @@
 int main(int argc, char** argv)
 {
   std::string filename = "simple.lua";
+  bool isMultiThreaded = true;
+  int numberOfThreads = 4;
+  int numberOfSamples = 10;
   if (argc >= 2) {
     filename = argv[1];
   }
+
   time_t start,end;
   time (&start);
   if (!run_lua(filename)) {

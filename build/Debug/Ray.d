@@ -1,4 +1,4 @@
-Debug/Mesh.o: ../Mesh.cpp ../../shared/include/glm/ext.hpp \
+Debug/Ray.o: ../Ray.cpp ../Ray.hpp ../../shared/include/glm/ext.hpp \
  ../../shared/include/glm/./gtc/bitfield.hpp \
  ../../shared/include/glm/./gtc/../detail/setup.hpp \
  ../../shared/include/glm/./gtc/../detail/precision.hpp \
@@ -214,9 +214,9 @@ Debug/Mesh.o: ../Mesh.cpp ../../shared/include/glm/ext.hpp \
  ../../shared/include/glm/./gtx/simd_mat4.hpp \
  ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.hpp \
  ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.inl \
- ../../shared/include/glm/./gtx/simd_mat4.inl \
- ../../shared/include/glm/gtx/io.hpp ../../shared/include/glm/gtx/io.inl \
- ../Mesh.hpp ../Primitive.hpp ../Ray.hpp ../polyroots.hpp
+ ../../shared/include/glm/./gtx/simd_mat4.inl
+
+../Ray.hpp:
 
 ../../shared/include/glm/ext.hpp:
 
@@ -651,15 +651,3 @@ Debug/Mesh.o: ../Mesh.cpp ../../shared/include/glm/ext.hpp \
 ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.inl:
 
 ../../shared/include/glm/./gtx/simd_mat4.inl:
-
-../../shared/include/glm/gtx/io.hpp:
-
-../../shared/include/glm/gtx/io.inl:
-
-../Mesh.hpp:
-
-../Primitive.hpp:
-
-../Ray.hpp:
-
-../polyroots.hpp:

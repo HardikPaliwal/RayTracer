@@ -251,7 +251,10 @@ int gr_mesh_cmd(lua_State* L)
 
 	const char* name = luaL_checkstring(L, 1);
 	const char* obj_fname = luaL_checkstring(L, 2);
+  int isInterpolated = luaL_checknumber(L, 3);
+  bool inter = true;
 
+  if(isInterpolated == 0) inter = false;
 	std::string sfname(obj_fname);
 
 	// Use a dictionary structure to make sure every mesh is loaded
@@ -260,7 +263,7 @@ int gr_mesh_cmd(lua_State* L)
 	Mesh *mesh = nullptr;
 
 	if( i == mesh_map.end() ) {
-		mesh = new Mesh(obj_fname);
+		mesh = new Mesh(obj_fname, inter);
 		mesh_map[sfname] = mesh;
 	} else {
 		mesh = i->second;
@@ -343,7 +346,11 @@ int gr_render_cmd(lua_State* L)
   }
 
 	Image im( width, height);
-	A4_Render(root->node, im, eye, view, up, fov, ambient, lights);
+  int superSamples = luaL_checknumber(L, 11);
+  int threads = luaL_checknumber(L, 12);
+  int pathTracingSamples = luaL_checknumber(L, 13);
+	A4_Render(root->node, im, eye, view, up, fov, ambient, lights,
+         superSamples, threads, pathTracingSamples);
     im.savePng( filename );
 
 	return 0;

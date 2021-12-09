@@ -73,7 +73,8 @@ Debug/PhongMaterial.o: ../PhongMaterial.cpp ../PhongMaterial.hpp \
  ../../shared/include/glm/vector_relational.hpp \
  ../../shared/include/glm/integer.hpp \
  ../../shared/include/glm/detail/func_integer.hpp \
- ../../shared/include/glm/detail/func_integer.inl ../Material.hpp
+ ../../shared/include/glm/detail/func_integer.inl ../Material.hpp \
+ ../Image.hpp
 
 ../PhongMaterial.hpp:
 
@@ -228,3 +229,5 @@ Debug/PhongMaterial.o: ../PhongMaterial.cpp ../PhongMaterial.hpp \
 ../../shared/include/glm/detail/func_integer.inl:
 
 ../Material.hpp:
+
+../Image.hpp:

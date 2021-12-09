@@ -218,9 +218,10 @@ Release/scene_lua.o: ../scene_lua.cpp ../scene_lua.hpp ../lua488.hpp \
  ../../shared/include/glm/./gtx/simd_mat4.hpp \
  ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.hpp \
  ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.inl \
- ../../shared/include/glm/./gtx/simd_mat4.inl ../GeometryNode.hpp \
- ../SceneNode.hpp ../Material.hpp ../JointNode.hpp ../PhongMaterial.hpp \
- ../Image.hpp ../A4.hpp
+ ../../shared/include/glm/./gtx/simd_mat4.inl \
+ ../../shared/include/glm/gtx/io.hpp ../../shared/include/glm/gtx/io.inl \
+ ../GeometryNode.hpp ../SceneNode.hpp ../Material.hpp ../JointNode.hpp \
+ ../PhongMaterial.hpp ../Image.hpp ../A4.hpp
 
 ../scene_lua.hpp:
 
@@ -677,6 +678,10 @@ Release/scene_lua.o: ../scene_lua.cpp ../scene_lua.hpp ../lua488.hpp \
 ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.inl:
 
 ../../shared/include/glm/./gtx/simd_mat4.inl:
+
+../../shared/include/glm/gtx/io.hpp:
+
+../../shared/include/glm/gtx/io.inl:
 
 ../GeometryNode.hpp:
 

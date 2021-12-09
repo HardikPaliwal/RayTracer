@@ -24,7 +24,9 @@ void A4_Render(
 
 		// Lighting parameters
 		const glm::vec3 & ambient,
-		const std::list<Light *> & lights
+		const std::list<Light *> & lights,
+		int superSample,
+		int numberOfThreads, int pathTracingSamples
 );
 
 

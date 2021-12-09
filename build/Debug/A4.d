@@ -215,8 +215,8 @@ Debug/A4.o: ../A4.cpp ../../shared/include/glm/ext.hpp \
  ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.hpp \
  ../../shared/include/glm/./gtx/../detail/intrinsic_matrix.inl \
  ../../shared/include/glm/./gtx/simd_mat4.inl ../PhongMaterial.hpp \
- ../Material.hpp ../A4.hpp ../SceneNode.hpp ../GeometryNode.hpp \
- ../Primitive.hpp ../Light.hpp ../Image.hpp \
+ ../Material.hpp ../Image.hpp ../A4.hpp ../SceneNode.hpp \
+ ../GeometryNode.hpp ../Primitive.hpp ../Light.hpp \
  ../../shared/include/glm/gtx/io.hpp ../../shared/include/glm/gtx/io.inl
 
 ../../shared/include/glm/ext.hpp:
@@ -657,6 +657,8 @@ Debug/A4.o: ../A4.cpp ../../shared/include/glm/ext.hpp \
 
 ../Material.hpp:
 
+../Image.hpp:
+
 ../A4.hpp:
 
 ../SceneNode.hpp:
@@ -666,8 +668,6 @@ Debug/A4.o: ../A4.cpp ../../shared/include/glm/ext.hpp \
 ../Primitive.hpp:
 
 ../Light.hpp:
-
-../Image.hpp:
 
 ../../shared/include/glm/gtx/io.hpp:
 
