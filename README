@@ -1,5 +1,4 @@
 Hardik Paliwal
-20725413
 
 commands to run:
 premake4 gmake
@@ -7,21 +6,10 @@ make config=release
 cp A4 Assets/.
 ./A4 test.lua
 
-For this project I have completed objective 5, 6, 7, 8, 9. I have attempted 10, and 1. 
+![](screenshot.png)
 
-test[0-7].lua are proof of the objectives working.
+Simple ray tracer. Takes in sphere, cube or plane primitives. Also supports triangle meshes using .obj file. 
 
-My attempt on 10 is in the Mesh.h, Mesh.c file.
+Rebder scene must be writtin in .lua files, see /Assets for examples. 
 
-I have modified A4_render to also take in samples for anti aliasing, threads for multi threading and samples 
-for path tracing (path tracing does not work).
-
-I have also modified materials to take in texture, bump mapping images. 
-
-Lastly I modifed meshes to add a variable to enable interpolated vertex normals or face normals for shading.
-
-For proof of multithreading working, run test0.lua with 1 thread vs 4 threads (by default it runs with 4 threads)
-
-With 1 thread I get a runtime of: 28s
-with 4 threads I get: 8sec
-To modify number of threads, change second last variable in g2.render in the .lua file.
+This is a multi threaded ray tracer, number of threads can be set in your .lua file.  
