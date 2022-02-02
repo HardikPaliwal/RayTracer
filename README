@@ -6,7 +6,7 @@ make config=release
 cp A4 Assets/.
 ./A4 test.lua
 
-![](screenshot.png)
+![example scene](/screenshot.png)
 
 Simple ray tracer. Takes in sphere, cube or plane primitives. Also supports triangle meshes using .obj file. 
 
