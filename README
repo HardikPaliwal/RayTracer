@@ -5,26 +5,23 @@ commands to run:
 premake4 gmake
 make config=release
 cp A4 Assets/.
-./A4 sample.lua
+./A4 test.lua
 
-For this assignment I have attempted to complete everything. My extra feature is reflections. My sample scene is a reflective plane and reflective dodeca with 3 light sources. The scene was implemented in a hierarchal manner. 
-I also enabled reflectance for nonheir.lua scene in order to make it  a bit easier to mark. 
+For this project I have completed objective 5, 6, 7, 8, 9. I have attempted 10, and 1. 
 
- However some issues remain.
+test[0-7].lua are proof of the objectives working.
 
- 1. Something is wrong with cubes. They appear heavily noised. Apart from that they work fine (all transformations work and everything)
+My attempt on 10 is in the Mesh.h, Mesh.c file.
 
- 2. my hierarchal model  works more or less but it is a bit buggy. For example hier.lua comes out fine but simple-cow.lua has the first space faring cow and is beyond the reach of my ray tracer
+I have modified A4_render to also take in samples for anti aliasing, threads for multi threading and samples 
+for path tracing (path tracing does not work).
 
+I have also modified materials to take in texture, bump mapping images. 
 
-Per the objectives list I am not meeting 2 of them:
+Lastly I modifed meshes to add a variable to enable interpolated vertex normals or face normals for shading.
 
-2. ▢ Cubes and triangle meshes are properly rendered.
+For proof of multithreading working, run test0.lua with 1 thread vs 4 threads (by default it runs with 4 threads)
 
-5. Hierarchical transformations perform correctly. Spheres and cubes can be transformed via arbitrary Affine transformations.
-
-But both objectives are more than partially implemented- save for some stupid bug they are pretty much finished. Please take that into consideration when marking (and also the fact that I forgot to submit my README for A3 and thus lost 10% for no reason. I assure you that README was as awesome as this one is.)
-
-
-Lastly note that in order to make an item be considered reflective by my program, just set the m_shininess value to 6.666.  Yes this is a hardcoded, magic number. 
-In my defense I am writing this at 9am after an all nighter trying to fix the aforementioned bugs which did not work out well. 
+With 1 thread I get a runtime of: 28s
+with 4 threads I get: 8sec
+To modify number of threads, change second last variable in g2.render in the .lua file.

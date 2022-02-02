@@ -84,6 +84,6 @@ s:translate(0, 2, 8)
 white_light = gr.light({0, 4.5, 0}, {0.9, 0.9, 0.9}, {1, 0, 0})
 
 
-gr.render(scene_root, 'feature-antialiasing.png', 300, 300,
+gr.render(scene_root, 'feature-antialiasing.png', 200, 200,
 	  {0, 3, 0}, {0, 3, 2}, {0, 1, 0}, 50,
-	  {0.3, 0.3, 0.3}, {white_light}, 2, 1, 1)
+	  {0.3, 0.3, 0.3}, {white_light}, 4, 1, 1)

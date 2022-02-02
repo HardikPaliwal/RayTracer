@@ -43,7 +43,6 @@ std::vector<glm::vec3> Mesh::intersection(glm::vec3 o, glm::vec3 d){
 		// }
 	// }
 	// if (closest == 1000000000) throw "no match";
-	
 
 	glm::vec3 intersect = o + d*closest;
 	glm::vec3 t1 = m_vertices[faces[faceIndex].v2] - intersect;

@@ -1,0 +1,31 @@
+Hardik Paliwal
+20725413
+
+Overall Structure of Code:
+
+    Main ray tracing logic is in A4.cpp in various recursively defined functions. 
+    Global variables (ie, lights, ambient ligthing etc) are used to make the code a bit cleaner.
+        My Current setup is that you split the rows by number of threads and then run the algorithm
+        on each thread for a section of rows. std::thread was used for multithreading
+            With regards to multithreading I did face an issue where the multithreaded code was as slow
+            as single threaded code (despite using 4 cores). I believe locks around accessing objects and
+            their associated intersection functions is to blame for this. As such, the most multithreaded
+            gains can be seen in mesh objects (which do not lock) and the least, or none in none mesh objects. Very weird.
+        
+    Primitives (Sphere, mesh, box) contain all the logic for ray object intersections.
+
+    I attempted a bounding value hierarchy in Mesh.h and Mesh.c, but kept getting segfaults.No time to debug. I used a top down approach to its construction (construct the bounding box containing all triangle vertexes, then split the box by the largest axis, sort faces into the 2 new boxes and then repeat until we reach a leaf size of 10 faces). For faces
+    that span 2 bounding boxes I simply added it to both boxes. This makes the tree less efficient but makes the construction signifcantly easier. 
+
+    As for normal and bump mapping (l96 a4.cpp), I more or less followed the algorithm laid out in my proposal. There were some issues, malloc errors, when I added the decodePng function to Image and as such I do not load textures in a PhongMaterial class but rather a4.cc and access the correct texture by name. If you wish to add custom textures, please add them there or you will get errors. I also modified scene_lua.cpp to allow the passing in of textures. 
+
+    Anti aliasing (l170 a4.cpp) was done through simply spliting  each pixel into superSample*superSample pixels and then averaging them out. 
+
+
+
+Sources used:
+https://learnopengl.com/Advanced-Lighting/Normal-Mapping
+http://raytracerchallenge.com/bonus/bounding-boxes.html
+https://www.scratchapixel.com/lessons/advanced-rendering/introduction-acceleration-structure/bounding-volume-hierarchy-BVH-part1
+
+https://raytracing.github.io/books/RayTracingInOneWeekend.html

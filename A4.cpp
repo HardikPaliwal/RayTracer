@@ -114,8 +114,6 @@ glm::vec3 shade(glm::vec3 intersection, glm::vec3 normal,glm::vec3 eye, PhongMat
 			finalColour +=  iterate(intersection, reflectingRay,  maxBounces, objects);
 		}
 
-
-
 		float distance = glm::distance(intersection, light->position);
 		glm::vec3 diffuse= (1/(distance*distance))*light->colour * lightIntensity*pMaterial->m_kd  * glm::max(0.0f,glm::dot(normal,  betweenLightAndPoint));
 
@@ -163,9 +161,11 @@ glm::vec3 iterate(glm::vec3 eye, glm::vec3 direction,  int maxBounces,std::vecto
 void multiThreadedIterate(int start, int end, int width, int height, int imageWidth, 
 				int imageHeight, int d, bool antiAliasing, int superSample, glm::vec3 eye, glm::vec3 u, glm::vec3 v, glm::vec3 w,
 				std::vector<GeometryNode *> objects){
+
+
 	for (uint y = start; y < end; ++y) {	
 		for (uint x = 0; x < width; ++x) {
-			glm::vec3 colour;
+			glm::vec3 colour = glm::vec3(0);
 			if (antiAliasing){
 				for (int i = 0; i < superSample; i++){
 					float xOffset = x+ i/superSample;
